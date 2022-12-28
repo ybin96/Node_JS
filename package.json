@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "co": "^4.6.0",
+    "express": "^3.4.7",
+    "mongodb": "^4.13.0",
+    "oracledb": "^5.5.0"
+  }
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function(){
+            $(document).on("click",".dept", function(){
+               var td_list = $(this).find("td");
+               $("#dno").val( $(td_list[0]).html() ); 
+               $("#dname").val( $(td_list[1]).html() ); 
+               $("#dloc").val( $(td_list[2]).html() ); 
+            });
+                    
+            function listDept(){
+                $.ajax({url:"listDept",success:function(rows){
+                    $("#list").empty();
+                    $.each(rows, function(){
+                        
+                        let tr = $("<tr></tr>").addClass("dept");
+                        let td1 = $("<td></td>").html(this.dno);
+                        let td2 = $("<td></td>").html(this.dname);
+                        let td3 = $("<td></td>").html(this.dloc);
+                        $(tr).append(td1,td2,td3);
+                        $("#list").append(tr);
+                    });
+             }});   
+            }
+            
+          listDept();
+          $("#btnAdd").click(function(){
+            let data = $("#f").serializeArray();
+            $.post("insertDept",data,function(r){
+                listDept();
+            });
+          });
+
+          $("#btnUpdate").click(function(){
+            let data = $("#f").serializeArray();
+            $.post("updateDept",data,function(r){
+                listDept();
+            });
+          });
+
+          $("#btnDelete").click(function(){
+            if(confirm('정말로 삭제할까요?')){
+                let data = $("#f").serializeArray();
+                $.post("deleteDept",data,function(r){
+                    listDept();
+                });
+            }
+          });
+        });
+    </script>
+</head>
+<body>
+    <h2>부서관리</h2>
+    <hr>
+    <form id="f">
+        부서번호 : <input type="text" name="dno" id="dno"><br>
+        부서이름 : <input type="text" name="dname" id="dname"><br>
+        부서위치 : <input type="text" name="dloc" id="dloc"><br>
+    </form>
+    <button id="btnAdd">등록</button>
+    <button id="btnUpdate">수정</button>
+    <button id="btnDelete">삭제</button>
+    <table border="1" width="60%">
+        <thead>
+            <tr>
+                <th>부서번호</th>
+                <th>부서이름</th>
+                <th>부서위치</th>               
+            </tr>
+        </thead>
+        <tbody id="list"></tbody>
+    </table>
+</body>
+</html>

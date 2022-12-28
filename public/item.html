@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script>
+        $(function(){
+            $.ajax({
+                url:"/item/json",
+                success:function(data){
+                    $.each(data, function(){
+                        var tr = $("<tr></tr>");
+                        var td1 = $("<td></td>").html(this.name);
+                        var td2 = $("<td></td>").html(this.price);
+                        $(tr).append(td1, td2);
+                        $("#list").append(tr);
+                    });
+                }
+            })
+        });      
+    </script>
+
+</head>
+<body>
+    <h2>상품목록</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <td>상품이름</td>
+                <td>가격</td>
+            </tr>
+        </thead>
+        <tbody id="list"></tbody>
+    </table>
+</body>
+</html>
