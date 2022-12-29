@@ -1,0 +1,4 @@
+create table dept(dno number primary key, dname varchar2(20), dloc varchar2(20));
+insert into dept values(1, '영업팀', '판교');
+insert into dept values(2, '개발팀', '서교동');
+insert into dept values(3, '기획팀', '서교동');

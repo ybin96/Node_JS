@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const TableHeader = ()=>{
+            return(
+                <thead>
+                    <tr>
+                        <th>부서번호</th>    
+                        <th>부서명</th>    
+                        <th>부서위치</th>    
+                    </tr>    
+                </thead>
+            )
+        }
+        
+        const TableBody = (props) =>{
+            const rows = props.listData.map((row,index)=>{
+                return (
+                    <tr>
+                        <td>{row.dno}</td>
+                        <td>{row.dname}</td>
+                        <td>{row.dloc}</td>
+                    </tr>
+                )
+            })
+            return <tbody>{rows}</tbody>
+        }
+
+        class Table extends React.Component{
+            render(){
+                const {listData} = this.props
+                return(
+                    <table>
+                        <TableHeader/>
+                        <TableBody listData={listData}/>
+                    </table>   
+                )
+            }
+        }
+
+        axios.get("/listDept").then(function(res){
+            console.log(res.data)
+            class App extends React.Component{
+                render(){
+                    const list = res.data
+                    return(
+                        <div>
+                            <Table listData={list}/>
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<App/>,document.getElementById("root"))
+        })
+
+    </script>
+</body>
+</html>
