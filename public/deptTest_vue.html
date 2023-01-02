@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+   <form id="f">
+    부서번호 : <input type="text" name="dno" id="dno" v-model="d.dno"><br>
+    부서이름 : <input type="text" name="dname" id="dname" v-model="d.dname"><br>
+    부서위치 : <input type="text" name="dloc" id="dloc" v-model="d.dloc"><br>
+    <button v-on:click="add">등록</button>
+    <button v-on:click="update">수정</button>
+   </form>
+
+   <table id="tb" border="1" width="60%">
+        <tr>
+            <th>부서번호</th>
+            <th>부서이름</th>
+            <th>부서위치</th>
+        </tr>
+        <tr v-for="d in list" v-on:click="sel(d)">
+            <td>{{ d.dno }}</td> 
+            <td>{{ d.dname }}</td> 
+            <td>{{ d.dloc }}</td> 
+        </tr>
+   </table>
+
+   <script>
+        url = "/listDept";
+        function callAjax(url, data){
+            const axiosConfig = {
+                headers:{
+                    "Content-Type":"application/x-www-form-urlencoded"
+                }
+            }
+            axios.post(url,data,axiosConfig).then(function(){
+                location.href="deptTest_vue.html"
+            })
+        }
+
+        axios.get("/listDept").then(function(res){            
+            Vue.createApp({
+                data() {
+                    return {
+                        list: res.data
+                    }
+                },methods:{
+                    sel:function(d){
+                        input_form.d = d
+                    }
+                }
+            }).mount('#tb')
+        })
+
+        var input_form = Vue.createApp({
+            data(){
+                return {d:{dno:"1",dname:"홍보팀",dloc:"서교동"}}
+            }, 
+            methods:{
+                add:function(){
+                    url = "/insertDept";
+                    callAjax(url, this.d);
+                    return false;
+                },
+                update:function(){
+                    url = "/updateDept";
+                    callAjax(url, this.d);
+                    return false;
+                }
+            }
+        }).mount("#f")
+        
+   </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

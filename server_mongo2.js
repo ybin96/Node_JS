@@ -36,6 +36,35 @@ app.post("/insertDept", function(req,res){
   res.send("OK");
 });
 
+
+app.post("/updateDept", function(req,res){
+	var dept = req.body;		
+  
+  async function run() {
+    try {
+      await client.connect();
+      const database = client.db("mydb");
+      const movies = database.collection("dept");     
+
+      const filter = {dno:dept.dno};
+      const options = { upsert: true };   
+      const updateDoc = {$set:{dname:dept.dname,dloc:dept.dloc }};
+
+      const result = await movies.updateOne(filter, updateDoc, options );
+      console.log(
+      `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
+      );
+    } finally {
+      await client.close();
+    }
+  }
+  run().catch(console.dir);
+  res.send("OK");
+});
+
+
+
+
 app.get("/listDept", function(req,res){
   const client = new MongoClient(url);
   client.connect(function(err, client) {
